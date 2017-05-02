@@ -99,7 +99,7 @@ class Lane:
         # Shape of the frame
         self.shape = img_shape
         # Y coordinate span
-        self.y_space = np.linspace(self.shape[0] // 2, self.shape[0] - 1, self.shape[0] // 2)
+        self.y_space = np.linspace(self.shape[0], self.shape[0] - 1, self.shape[0])
 
         src, dst = self.__get_warp_dims()
         # Matrix for warping
@@ -216,7 +216,7 @@ class Lane:
             base = np.argmax(histogram[midpoint:]) + midpoint
 
         nwindows = 15
-        window_height = np.int(((src.shape[0] // 2) // nwindows))
+        window_height = np.int(((src.shape[0]) // nwindows))
         nonzero  = src.nonzero()
         nonzeroy = np.array(nonzero[0])
         nonzerox = np.array(nonzero[1])
@@ -300,9 +300,10 @@ class Lane:
     def __measure_curvature(self):
         # Calculate the new radii of curvature
         y_eval = self.shape[0]
-        left_curverad = ((1 + (2 * self.left.fit[0] * y_eval * ym_per_pix + self.left.fit[1]) ** 2) ** 1.5) / np.absolute(2 * self.left.fit[0])
-        right_curverad = ((1 + (2 * self.right.fit[0] * y_eval * ym_per_pix + self.right.fit[1]) ** 2) ** 1.5) / np.absolute(2 * self.right.fit[0])
+        left_curverad = ((1 + (2 * self.left.fit[0] * y_eval + self.left.fit[1]) ** 2) ** 1.5) / np.absolute(2 * self.left.fit[0])
+        right_curverad = ((1 + (2 * self.right.fit[0] * y_eval + self.right.fit[1]) ** 2) ** 1.5) / np.absolute(2 * self.right.fit[0])
 
+        print(left_curverad, right_curverad)
         self.curvature = np.mean([left_curverad, right_curverad])
 
     def __print_summary(self, out):
