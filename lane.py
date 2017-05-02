@@ -99,7 +99,7 @@ class Lane:
         # Shape of the frame
         self.shape = img_shape
         # Y coordinate span
-        self.y_space = np.linspace(self.shape[0], self.shape[0] - 1, self.shape[0])
+        self.y_space = np.linspace(self.shape[0] // 2, self.shape[0] - 1, self.shape[0] // 2)
 
         src, dst = self.__get_warp_dims()
         # Matrix for warping
